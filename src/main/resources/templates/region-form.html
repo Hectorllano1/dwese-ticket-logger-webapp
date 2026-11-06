@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head :: head (#{msg.region-form.title})"></head>
+
+<body>
+
+<!-- Incluir el fragmento del header -->
+<header th:replace="fragments/header :: header"></header>
+
+<main class="container mt-5">
+
+    <!-- Título dinámico -->
+    <h1 th:if="${region.id == null}"
+        th:text="#{msg.region-form.add}">
+        Nueva Comunidad Autónoma
+    </h1>
+
+    <h1 th:unless="${region.id == null}"
+        th:text="#{msg.region-form.edit}">
+        Editar Comunidad Autónoma
+    </h1>
+
+    <!-- Mensaje de error -->
+    <div th:if="${errorMessage}" class="alert alert-danger">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <!-- Formulario -->
+    <form th:action="${region.id == null} ? @{/regions/insert} : @{/regions/update}"
+          th:object="${region}"
+          method="post"
+          class="mt-4">
+
+        <input type="hidden" th:field="*{id}" />
+
+        <!-- Código -->
+        <div class="mb-3">
+
+            <label for="code"
+                   class="form-label"
+                   th:text="#{msg.region-form.code}">
+                Código
+            </label>
+
+            <input type="text"
+                   th:field="*{code}"
+                   id="code"
+                   class="form-control" />
+
+            <div th:if="${#fields.hasErrors('code')}"
+                 class="text-danger"
+                 th:errors="*{code}">
+            </div>
+
+        </div>
+
+        <!-- Nombre -->
+        <div class="mb-3">
+
+            <label for="name"
+                   class="form-label"
+                   th:text="#{msg.region-form.name}">
+                Nombre
+            </label>
+
+            <input type="text"
+                   th:field="*{name}"
+                   id="name"
+                   class="form-control" />
+
+            <div th:if="${#fields.hasErrors('name')}"
+                 class="text-danger"
+                 th:errors="*{name}">
+            </div>
+
+        </div>
+
+        <!-- Botón crear -->
+        <button type="submit"
+                class="btn btn-primary"
+                th:if="${region.id == null}"
+                th:text="#{msg.region-form.create}">
+            Crear
+        </button>
+
+        <!-- Botón actualizar -->
+        <button type="submit"
+                class="btn btn-primary"
+                th:unless="${region.id == null}"
+                th:text="#{msg.region-form.update}">
+            Actualizar
+        </button>
+
+    </form>
+
+    <!-- Volver a la lista -->
+    <a th:href="@{/regions}"
+       class="btn btn-secondary mt-3"
+       th:text="#{msg.region-form.returnback}">
+        Volver a la lista
+    </a>
+
+</main>
+
+<!-- Incluir el fragmento del footer -->
+<footer th:replace="fragments/footer :: footer"></footer>
+
+</body>
+</html>
